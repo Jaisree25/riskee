@@ -1,0 +1,152 @@
+version: '3.8'
+
+# Feature 1: Real-Time Price Prediction System
+# Docker Compose Configuration
+
+services:
+  # TimescaleDB (PostgreSQL 15 with TimescaleDB extension)
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: riskee_timescaledb
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-riskee123}
+      POSTGRES_DB: ${POSTGRES_DB:-riskee}
+    ports:
+      - "5432:5432"
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+      - ./scripts/db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - riskee_network
+
+  # Redis 7 (Cache and fast storage)
+  redis:
+    image: redis:7-alpine
+    container_name: riskee_redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - riskee_network
+
+  # NATS JetStream (Message bus)
+  nats:
+    image: nats:latest
+    container_name: riskee_nats
+    command: >
+      -js
+      -sd /data
+      -m 8222
+    ports:
+      - "4222:4222"  # Client connections
+      - "8222:8222"  # Monitoring
+    volumes:
+      - nats_data:/data
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:8222/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - riskee_network
+
+  # Qdrant (Vector database for RAG)
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: riskee_qdrant
+    ports:
+      - "6333:6333"  # HTTP API
+      - "6334:6334"  # gRPC
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - riskee_network
+
+  # Ollama (LLM server)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: riskee_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    # GPU support (requires nvidia-docker)
+    # Uncomment if you have NVIDIA GPU
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - riskee_network
+
+  # Prometheus (Metrics collection)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: riskee_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - riskee_network
+
+  # Grafana (Monitoring dashboards)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: riskee_grafana
+    ports:
+      - "3001:3000"  # Using 3001 to avoid conflict with UI on 3000
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-riskee123}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./config/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - riskee_network
+
+volumes:
+  timescaledb_data:
+  redis_data:
+  nats_data:
+  qdrant_data:
+  ollama_models:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  riskee_network:
+    driver: bridge
