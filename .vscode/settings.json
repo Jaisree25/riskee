@@ -1,0 +1,265 @@
+{
+  // ========================================
+  // Feature 1: Real-Time Price Prediction System
+  // VS Code Workspace Settings
+  // ========================================
+
+  // Python Configuration
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.inlayHints.functionReturnTypes": true,
+
+  // Formatting
+  "python.formatting.provider": "none",
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.rulers": [88, 120],
+    "editor.tabSize": 4
+  },
+
+  // Ruff (Linter & Formatter)
+  "ruff.enable": true,
+  "ruff.organizeImports": true,
+  "ruff.fixAll": true,
+  "ruff.lint.args": [
+    "--select=E,F,W,C90,I,N,UP,YTT,ANN,S,BLE,FBT,B,A,COM,C4,DTZ,T10,EM,EXE,ISC,ICN,G,INP,PIE,T20,PYI,PT,Q,RSE,RET,SLF,SIM,TID,TCH,INT,ARG,PTH,ERA,PD,PGH,PL,TRY,NPY,RUF",
+    "--line-length=88"
+  ],
+
+  // Testing
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": [
+    "tests",
+    "-v",
+    "--cov",
+    "--cov-report=html"
+  ],
+
+  // JavaScript/TypeScript (for UI)
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+
+  // Markdown
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "on",
+      "strings": "on",
+      "other": "on"
+    }
+  },
+
+  // YAML/Docker
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "keep"
+  },
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2
+  },
+
+  // File Associations
+  "files.associations": {
+    "docker-compose*.yml": "dockercompose",
+    "*.env.*": "properties",
+    ".env*": "properties"
+  },
+
+  // Editor Settings
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.rulers": [80, 120],
+  "editor.renderWhitespace": "boundary",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.inlineSuggest.enabled": true,
+
+  // File Explorer
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true,
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/*.egg-info": true
+  },
+
+  // Search
+  "search.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.venv": true,
+    "**/htmlcov": true,
+    "**/.coverage": true
+  },
+
+  // Git
+  "git.ignoreLimitWarning": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+
+  // Terminal
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.env.windows": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+
+  // Docker
+  "docker.containers.sortBy": "Status",
+  "docker.images.sortBy": "CreatedTime",
+
+  // Extensions
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  // Jupyter (for ML development)
+  "jupyter.askForKernelRestart": false,
+  "jupyter.interactiveWindow.textEditor.executeSelection": true,
+
+  // Auto Save
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+
+  // Breadcrumbs
+  "breadcrumbs.enabled": true,
+  "breadcrumbs.symbolPath": "on",
+
+  // Minimap
+  "editor.minimap.enabled": true,
+  "editor.minimap.renderCharacters": false,
+
+  // IntelliSense
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
+  // Feature 1 Specific Paths
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/services",
+    "${workspaceFolder}/libs"
+  ],
+
+  // Todo Tree (for tracking TODOs in code)
+  "todo-tree.general.tags": [
+    "TODO",
+    "FIXME",
+    "BUG",
+    "HACK",
+    "NOTE",
+    "REVIEW",
+    "OPTIMIZE"
+  ],
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text",
+    "foreground": "#000000",
+    "background": "#ffff00",
+    "opacity": 50,
+    "iconColour": "#ffff00"
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "foreground": "#000000",
+      "background": "#ffff00",
+      "iconColour": "#ffff00"
+    },
+    "FIXME": {
+      "icon": "alert",
+      "foreground": "#ffffff",
+      "background": "#ff0000",
+      "iconColour": "#ff0000"
+    },
+    "BUG": {
+      "icon": "bug",
+      "foreground": "#ffffff",
+      "background": "#ff0000",
+      "iconColour": "#ff0000"
+    },
+    "NOTE": {
+      "icon": "note",
+      "foreground": "#000000",
+      "background": "#00ff00",
+      "iconColour": "#00ff00"
+    }
+  },
+
+  // Code Spell Checker
+  "cSpell.words": [
+    "asyncpg",
+    "asyncio",
+    "FastAPI",
+    "Grafana",
+    "JetStream",
+    "langchain",
+    "llama",
+    "LSTM",
+    "NATS",
+    "numpy",
+    "ollama",
+    "ONNX",
+    "pandas",
+    "postgres",
+    "Prometheus",
+    "pyproject",
+    "pytest",
+    "Qdrant",
+    "Redis",
+    "scikit",
+    "TimescaleDB",
+    "uvicorn",
+    "venv",
+    "yfinance",
+    "zustand"
+  ],
+
+  // Project Context (for AI assistants)
+  "project.name": "Feature 1: Real-Time Price Prediction System",
+  "project.description": "AI-powered stock price prediction with LLM explanations",
+  "project.milestone": "M1: Foundation & Infrastructure Setup"
+}

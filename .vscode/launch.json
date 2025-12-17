@@ -1,0 +1,125 @@
+{
+  // Feature 1: Debug Configurations
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "Python: Pytest Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "${file}",
+        "-v",
+        "-s"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Python: FastAPI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "services.api_gateway.main:app",
+        "--reload",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000"
+      ],
+      "jinja": true,
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "Python: Ingestion Agent",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/services/ingestion_agent/main.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "Python: Feature Store",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/services/feature_store/main.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "Python: Prediction Agent",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/services/prediction_normal_agent/main.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "Docker: Attach to Container",
+      "type": "docker",
+      "request": "attach",
+      "platform": "python",
+      "containerName": "${input:containerName}"
+    },
+    {
+      "name": "Next.js: Debug Server",
+      "type": "node",
+      "request": "launch",
+      "name": "Next.js: debug server-side",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "dev"],
+      "port": 9229,
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/services/ui"
+    },
+    {
+      "name": "Next.js: Debug Full Stack",
+      "type": "node",
+      "request": "launch",
+      "name": "Next.js: debug full stack",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "dev"],
+      "port": 9229,
+      "serverReadyAction": {
+        "action": "debugWithChrome",
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s",
+        "killOnServerStop": true
+      },
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/services/ui"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "containerName",
+      "type": "promptString",
+      "description": "Enter container name to attach to",
+      "default": "riskee_api_gateway_1"
+    }
+  ]
+}

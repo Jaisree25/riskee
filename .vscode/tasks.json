@@ -1,0 +1,237 @@
+{
+  // Feature 1: VS Code Tasks
+  "version": "2.0.0",
+  "tasks": [
+    // Docker Tasks
+    {
+      "label": "Docker: Start All Services",
+      "type": "shell",
+      "command": "docker-compose up -d",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Docker: Stop All Services",
+      "type": "shell",
+      "command": "docker-compose down",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: View Logs",
+      "type": "shell",
+      "command": "docker-compose logs -f",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Restart Service",
+      "type": "shell",
+      "command": "docker-compose restart ${input:serviceName}",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Build Images",
+      "type": "shell",
+      "command": "docker-compose build",
+      "problemMatcher": []
+    },
+
+    // Python Tasks
+    {
+      "label": "Python: Install Dependencies",
+      "type": "shell",
+      "command": "pip install -r requirements.txt",
+      "problemMatcher": []
+    },
+    {
+      "label": "Python: Run Tests",
+      "type": "shell",
+      "command": "pytest tests/ -v --cov --cov-report=html",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Python: Run Tests (Current File)",
+      "type": "shell",
+      "command": "pytest ${file} -v -s",
+      "problemMatcher": []
+    },
+    {
+      "label": "Python: Lint with Ruff",
+      "type": "shell",
+      "command": "ruff check .",
+      "problemMatcher": []
+    },
+    {
+      "label": "Python: Format with Ruff",
+      "type": "shell",
+      "command": "ruff format .",
+      "problemMatcher": []
+    },
+    {
+      "label": "Python: Type Check (mypy)",
+      "type": "shell",
+      "command": "mypy services/ --ignore-missing-imports",
+      "problemMatcher": []
+    },
+
+    // Database Tasks
+    {
+      "label": "DB: Run Migrations",
+      "type": "shell",
+      "command": "alembic upgrade head",
+      "problemMatcher": []
+    },
+    {
+      "label": "DB: Create Migration",
+      "type": "shell",
+      "command": "alembic revision --autogenerate -m \"${input:migrationMessage}\"",
+      "problemMatcher": []
+    },
+    {
+      "label": "DB: Connect to TimescaleDB",
+      "type": "shell",
+      "command": "docker exec -it riskee_timescaledb_1 psql -U postgres -d riskee",
+      "problemMatcher": []
+    },
+    {
+      "label": "DB: Connect to Redis CLI",
+      "type": "shell",
+      "command": "docker exec -it riskee_redis_1 redis-cli",
+      "problemMatcher": []
+    },
+
+    // NATS Tasks
+    {
+      "label": "NATS: Monitor Streams",
+      "type": "shell",
+      "command": "docker exec -it riskee_nats_1 nats stream ls",
+      "problemMatcher": []
+    },
+    {
+      "label": "NATS: View Stream Info",
+      "type": "shell",
+      "command": "docker exec -it riskee_nats_1 nats stream info ${input:streamName}",
+      "problemMatcher": []
+    },
+
+    // Monitoring Tasks
+    {
+      "label": "Monitoring: Open Grafana",
+      "type": "shell",
+      "command": "start http://localhost:3001",
+      "windows": {
+        "command": "start http://localhost:3001"
+      },
+      "linux": {
+        "command": "xdg-open http://localhost:3001"
+      },
+      "osx": {
+        "command": "open http://localhost:3001"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Monitoring: Open Prometheus",
+      "type": "shell",
+      "command": "start http://localhost:9090",
+      "windows": {
+        "command": "start http://localhost:9090"
+      },
+      "linux": {
+        "command": "xdg-open http://localhost:9090"
+      },
+      "osx": {
+        "command": "open http://localhost:9090"
+      },
+      "problemMatcher": []
+    },
+
+    // API Tasks
+    {
+      "label": "API: Open Swagger Docs",
+      "type": "shell",
+      "command": "start http://localhost:8000/api/docs",
+      "windows": {
+        "command": "start http://localhost:8000/api/docs"
+      },
+      "linux": {
+        "command": "xdg-open http://localhost:8000/api/docs"
+      },
+      "osx": {
+        "command": "open http://localhost:8000/api/docs"
+      },
+      "problemMatcher": []
+    },
+
+    // Cleanup Tasks
+    {
+      "label": "Cleanup: Remove Python Cache",
+      "type": "shell",
+      "command": "find . -type d -name __pycache__ -exec rm -rf {} + && find . -type f -name '*.pyc' -delete",
+      "windows": {
+        "command": "Get-ChildItem -Path . -Filter __pycache__ -Recurse | Remove-Item -Recurse -Force; Get-ChildItem -Path . -Filter *.pyc -Recurse | Remove-Item -Force"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Cleanup: Docker Prune",
+      "type": "shell",
+      "command": "docker system prune -f",
+      "problemMatcher": []
+    },
+
+    // Health Check Tasks
+    {
+      "label": "Health: Check All Services",
+      "type": "shell",
+      "command": "docker-compose ps && curl -s http://localhost:8000/health | jq",
+      "problemMatcher": []
+    },
+
+    // M1 Specific Tasks
+    {
+      "label": "M1: Run Smoke Tests",
+      "type": "shell",
+      "command": "python scripts/smoke_tests.py",
+      "problemMatcher": []
+    },
+    {
+      "label": "M1: Verify Health Checks",
+      "type": "shell",
+      "command": "bash scripts/verify_health.sh",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "serviceName",
+      "type": "promptString",
+      "description": "Enter service name",
+      "default": "api_gateway"
+    },
+    {
+      "id": "migrationMessage",
+      "type": "promptString",
+      "description": "Enter migration message",
+      "default": "initial schema"
+    },
+    {
+      "id": "streamName",
+      "type": "promptString",
+      "description": "Enter NATS stream name",
+      "default": "REALTIME_DATA"
+    }
+  ]
+}
