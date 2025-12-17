@@ -1,0 +1,2 @@
+# Feature 1: Infrastructure Setup Scripts Dependencies
+nats-py==2.10.0
